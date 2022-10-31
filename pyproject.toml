@@ -13,6 +13,8 @@ attrs = "^22.1.0"
 environs = "^9.5.0"
 PyMySQL = "^1.0.2"
 cryptography = "^38.0.2"
+Flask-Testing = "^0.8.1"
+mock = "^4.0.3"
 
 [tool.poetry.dev-dependencies]
 
