@@ -10,3 +10,5 @@ class AppModel:
 
 
 from models.user import *
+from models.community import *
+
