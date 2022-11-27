@@ -13,3 +13,7 @@ class Comment(db.Model, AppModel):
     comment = db.Column(db.String(255))
     create_dttm = db.Column(db.Date, default=datetime.date.today())
 
+    @staticmethod
+    def get_comments_by_post_id(post_id):
+        return Comment.query.filter_by(post_id=post_id).all()
+
