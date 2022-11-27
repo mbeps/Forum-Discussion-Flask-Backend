@@ -1,0 +1,26 @@
+[tool.poetry]
+name = "final year project"
+version = "0.1.0"
+description = "The backend system for the reddid clone forum site"
+authors = ["Maruf Bepary <bepary71@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+Flask = "^2.2.2"
+flask-sqlalchemy = "^3.0.2"
+Flask-Mail = "^0.9.1"
+attrs = "^22.1.0"
+environs = "^9.5.0"
+PyMySQL = "^1.0.2"
+cryptography = "^38.0.2"
+Flask-Testing = "^0.8.1"
+mock = "^4.0.3"
+Flask-Cors = "^3.0.10"
+mysql-connector-python = {git = "https://github.com/mysql/mysql-connector-python.git"}
+passlib = "^1.7.4"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
