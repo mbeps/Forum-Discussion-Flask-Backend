@@ -13,3 +13,6 @@ class Community(db.Model, AppModel):
     def get_all_communities():
         return Community.query.filter()
 
+    @staticmethod
+    def get_community_by_user_id(user_id):
+        return Community.query.filter_by(user_id=user_id).all()
