@@ -17,3 +17,6 @@ class Comment(db.Model, AppModel):
     def get_comments_by_post_id(post_id):
         return Comment.query.filter_by(post_id=post_id).all()
 
+    @staticmethod
+    def get_comments_by_id(comment_id):
+        return Comment.query.filter_by(comment_id=comment_id).first()
