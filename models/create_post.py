@@ -13,3 +13,6 @@ class Post(db.Model, AppModel):
     description = db.Column(db.String(256))
     create_dttm = db.Column(db.DateTime, default=datetime.datetime.now())
 
+    @staticmethod
+    def get_posts_by_user_id(user_id):
+        return Post.query.filter_by(user_id=user_id).all()
