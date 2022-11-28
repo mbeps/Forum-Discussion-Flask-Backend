@@ -62,3 +62,16 @@ def get_user_communities(user_id) -> Response:
             'description': community.description
         })
     return make_response(jsonify(communities_list), 200) # return list of communities
+
+
+@app.route('/subscribe-community', methods=['POST'])
+def subscribe_community():
+    comm_subs = request.get_json()
+    community_id = comm_subs.get('community_id')
+    user_id = comm_subs.get('user_id')
+    cs = CommunitySubscribe.query.filter_by(community_id=community_id, user_id=user_id).first()
+    if cs:
+        return make_response(jsonify({'msg': 'Community already subscribed'}), 400)
+    cs = CommunitySubscribe(community_id=community_id, user_id=user_id)
+    cs.save()
+    return make_response(jsonify({'msg': 'Community Added'}), 200)
