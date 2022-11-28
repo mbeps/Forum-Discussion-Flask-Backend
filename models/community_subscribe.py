@@ -23,3 +23,10 @@ class CommunitySubscribe(db.Model, AppModel):
     @staticmethod
     def get_community_by_user_id(user_id):
         return Community.query.filter_by(user_id=user_id).all()
+
+    @staticmethod
+    def unsubscribe_from_community(community_id, user_id):
+        community_subscribe = CommunitySubscribe.query.filter_by(
+            community_id=community_id, user_id=user_id).first()
+        db.session.delete(community_subscribe)
+        db.session.commit()
