@@ -22,6 +22,19 @@ def signup():
     email_authentication_code(email, user)
     return make_response(jsonify({'msg': 'signed up success'}), 200)
 
+@app.route('/verify_code', methods=['GET', 'POST'])
+def signup_full():
+    verify_mail = request.get_json() # Get the user data from the request
+    code = verify_mail.get('code') # Get the code
+    email = verify_mail.get('email') # Get the email
+    user = User.query.filter_by(email=email).first() # Get the user from the database
+    if user: # Check if the user exists
+        if code == user.code: # Check if the code is correct
+            user.is_authenticated = True # Set the user to authenticated
+            user.save() # Save the user to the database
+            return make_response(jsonify({'msg': 'Auth Success'}), 200) # Return success message
+        return make_response(jsonify({'msg': 'Please enter correct code'}), 401) # Return error message if the code is incorrect
+    return make_response(jsonify({'msg': 'No such user exist with this email'}), 200) # Return error message if the user does not exist
 
 
 def email_authentication_code(email, user):
