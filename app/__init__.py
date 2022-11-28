@@ -6,7 +6,6 @@ from environs import Env
 from flask_cors import CORS
 import pymysql
 import mysql.connector
-from models import *
 
 env = Env()
 env.read_env()
@@ -40,6 +39,7 @@ app.config['MAIL_SUPPRESS_SEND'] = False
 mail = Mail(app)
 db = SQLAlchemy(app)
 
+from models import *
 
 with app.app_context():
     db.create_all()
