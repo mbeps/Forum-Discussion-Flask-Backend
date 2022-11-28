@@ -44,13 +44,21 @@ def get_all_communities() -> Response:
 
 
 @app.route('/all_communities/<int:user_id>', methods=['GET'])
-def get_user_communities(user_id):
-    communities = CommunitySubscribe.get_all_subscribed_communities(user_id)
-    communities_list = []
-    for community in communities:
-        communities_list.append({
+def get_user_communities(user_id) -> Response:
+    """Gets all communities that a user is subscribed to.
+
+    Args:
+        user_id (int): user for which to get communities
+
+    Returns:
+        Response: list of communities that user is subscribed to
+    """    
+    communities: CommunitySubscribe = CommunitySubscribe.get_all_subscribed_communities(user_id) # get all communities user is subscribed to
+    communities_list: list[dict[str]] = [] # create empty list to store communities
+    for community in communities: # append community to list
+        communities_list.append({ 
             'community_id': community.community_id,
             'community_name': community.community_name,
             'description': community.description
         })
-    return make_response(jsonify(communities_list), 200)
+    return make_response(jsonify(communities_list), 200) # return list of communities
