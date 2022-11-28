@@ -102,6 +102,8 @@ def all_subscribed_communities() -> Response:
 
 @app.route('/remove_community', methods=['DELETE'])
 def remove_community() -> Response:
+    """Deletes a community from the database.
+    """
     community = request.get_json() # get json data from request
     community_id: int = community.get('community_id') # get community_id from json data
     if (Community.query.filter_by(community_id=community_id).first()):
