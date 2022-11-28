@@ -110,3 +110,20 @@ def remove_community() -> Response:
         Community.delete_community(community_id) # delete community from database
         return make_response(jsonify({'msg': 'Community has been deleted'}), 200) # return success message
     return make_response(jsonify({'msg': 'Community does not exist'}), 400) # return error message if community does not exist
+
+
+# unsubscribe from community given community_id and user_id
+@app.route('/unsubscribe_community', methods=['DELETE'])
+def unsubscribe_community() -> Response:
+    """Unsubscribes a user from a community.
+
+    Returns:
+        Response: whether the user was unsubscribed from the community or not
+    """    
+    comm_subs = request.get_json() # get json data from request
+    community_id: int = comm_subs.get('community_id') # get community_id from json data
+    user_id: int = comm_subs.get('user_id') # get user_id from json data
+    if (CommunitySubscribe.query.filter_by(community_id=community_id, user_id=user_id).first()): # check if user is subscribed to community
+        CommunitySubscribe.unsubscribe_from_community(community_id, user_id) # unsubscribe user from community
+        return make_response(jsonify({'msg': 'Community Unsubscribed'}), 200) # return success message
+    return make_response(jsonify({'msg': 'Community not subscribed'}), 400) # return error message if user is not subscribed to community
