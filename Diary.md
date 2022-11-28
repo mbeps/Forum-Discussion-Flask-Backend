@@ -23,6 +23,7 @@
 - Submitted project plan
 
 # November 2022
+- Learning GitLab CI to implement CICD pipelines with Docker containers
 
 # December 2022
 
