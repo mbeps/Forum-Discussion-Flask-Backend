@@ -79,3 +79,18 @@ def subscribe_community() -> Response:
     cs: CommunitySubscribe = CommunitySubscribe(community_id=community_id, user_id=user_id) # create community subscribe object
     cs.save() # save community subscribe object to database
     return make_response(jsonify({'msg': 'Community Added'}), 200) # return success message
+
+
+@app.route('/subscribed-community', methods=['POST'])
+def all_subscribed_communities():
+    user = request.get_json()
+    user_id = user.get('user_id')
+    communities = CommunitySubscribe.get_all_subscribed_communities(user_id)
+    all_communities = []
+    for community in communities:
+       all_communities.append({
+           'community_id': community.community_id,
+           'community_name': community.community_name
+       })
+    print(all_communities)
+    return make_response(jsonify(all_communities), 200)
