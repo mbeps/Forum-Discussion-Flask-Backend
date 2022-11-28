@@ -41,3 +41,16 @@ def get_all_communities() -> Response:
             'description': community.description
         })
     return make_response(jsonify(communities_list), 200) # return list of communities
+
+
+@app.route('/all_communities/<int:user_id>', methods=['GET'])
+def get_user_communities(user_id):
+    communities = CommunitySubscribe.get_all_subscribed_communities(user_id)
+    communities_list = []
+    for community in communities:
+        communities_list.append({
+            'community_id': community.community_id,
+            'community_name': community.community_name,
+            'description': community.description
+        })
+    return make_response(jsonify(communities_list), 200)
