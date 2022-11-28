@@ -26,13 +26,18 @@ def add_community() -> Response:
 
 
 @app.route('/all_communities', methods=['GET'])
-def get_all_communities():
-    communities = Community.get_all_communities()
-    communities_list = []
+def get_all_communities() -> Response:
+    """Gets all communities in the database. 
+
+    Returns:
+        Response: list of all communities
+    """    
+    communities = Community.get_all_communities() # get all communities from database
+    communities_list: list[dict[str]] = [] # create empty list to store communities
     for community in communities:
-        communities_list.append({
+        communities_list.append({ # append community to list
             'community_id': community.community_id,
             'community_name': community.community_name,
             'description': community.description
         })
-    return make_response(jsonify(communities_list), 200)
+    return make_response(jsonify(communities_list), 200) # return list of communities
