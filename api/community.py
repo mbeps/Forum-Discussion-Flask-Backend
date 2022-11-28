@@ -82,15 +82,19 @@ def subscribe_community() -> Response:
 
 
 @app.route('/subscribed-community', methods=['POST'])
-def all_subscribed_communities():
-    user = request.get_json()
-    user_id = user.get('user_id')
-    communities = CommunitySubscribe.get_all_subscribed_communities(user_id)
-    all_communities = []
+def all_subscribed_communities() -> Response:
+    """Gets all communities that a user is subscribed to.
+
+    Returns:
+        Response: list of communities that user is subscribed to
+    """    
+    user = request.get_json() # get json data from request
+    user_id: int = user.get('user_id') # get user_id from json data
+    communities: Community = CommunitySubscribe.get_all_subscribed_communities(user_id) # get all communities user is subscribed to
+    all_communities: list[dict] = [] # create empty list to store communities
     for community in communities:
-       all_communities.append({
+       all_communities.append({ # append community to list
            'community_id': community.community_id,
            'community_name': community.community_name
        })
-    print(all_communities)
-    return make_response(jsonify(all_communities), 200)
+    return make_response(jsonify(all_communities), 200) # return list of communities
