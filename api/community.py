@@ -44,7 +44,7 @@ def get_all_communities() -> Response:
 
 
 @app.route('/all_communities/<int:user_id>', methods=['GET'])
-def get_user_communities(user_id) -> Response:
+def get_user_communities(user_id: int) -> Response:
     """Gets all communities that a user is subscribed to.
 
     Args:
@@ -65,13 +65,17 @@ def get_user_communities(user_id) -> Response:
 
 
 @app.route('/subscribe-community', methods=['POST'])
-def subscribe_community():
-    comm_subs = request.get_json()
-    community_id = comm_subs.get('community_id')
-    user_id = comm_subs.get('user_id')
-    cs = CommunitySubscribe.query.filter_by(community_id=community_id, user_id=user_id).first()
-    if cs:
-        return make_response(jsonify({'msg': 'Community already subscribed'}), 400)
-    cs = CommunitySubscribe(community_id=community_id, user_id=user_id)
-    cs.save()
-    return make_response(jsonify({'msg': 'Community Added'}), 200)
+def subscribe_community() -> Response:
+    """Allows a user to subscribe to a community.
+
+    Returns:
+        Response: whether the user was subscribed to the community or not
+    """    
+    comm_subs = request.get_json() # get json data from request
+    community_id: int = comm_subs.get('community_id') # get community_id from json data
+    user_id: int = comm_subs.get('user_id') # get user_id from json data
+    if (CommunitySubscribe.query.filter_by(community_id=community_id, user_id=user_id).first()): # check if user is already subscribed to community:
+        return make_response(jsonify({'msg': 'Community already subscribed'}), 400) # return error message if user is already subscribed to community
+    cs: CommunitySubscribe = CommunitySubscribe(community_id=community_id, user_id=user_id) # create community subscribe object
+    cs.save() # save community subscribe object to database
+    return make_response(jsonify({'msg': 'Community Added'}), 200) # return success message
