@@ -4,26 +4,28 @@
 - Learnt API and routing 
 
 # September 2022
-## 12
+**12**
 - Came up with a project idea
 
-## 17 
+**17**
 - Started learning Flask for the back end 
 - Started learning some basic React for front end
 
 
 # October 2022
-## 1
+**1**
 - Set up Poetry project locally for experimentation
 
-## 4
+**4**
 - Started working on the project plan
 
-## 7 
+**7** 
 - Submitted project plan
 
 # November 2022
+**28**
 - Learning GitLab CI to implement CICD pipelines with Docker containers
+- Need to leard data mocking for testing APIs
 
 # December 2022
 
