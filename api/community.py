@@ -98,3 +98,13 @@ def all_subscribed_communities() -> Response:
            'community_name': community.community_name
        })
     return make_response(jsonify(all_communities), 200) # return list of communities
+
+
+@app.route('/remove_community', methods=['DELETE'])
+def remove_community() -> Response:
+    community = request.get_json() # get json data from request
+    community_id: int = community.get('community_id') # get community_id from json data
+    if (Community.query.filter_by(community_id=community_id).first()):
+        Community.delete_community(community_id) # delete community from database
+        return make_response(jsonify({'msg': 'Community has been deleted'}), 200) # return success message
+    return make_response(jsonify({'msg': 'Community does not exist'}), 400) # return error message if community does not exist

@@ -20,3 +20,9 @@ class Community(db.Model, AppModel):
     @staticmethod
     def get_community_by_community_id(community_id):
         return Community.query.filter_by(community_id=community_id).first()
+
+    @staticmethod
+    def delete_community(community_id):
+        community = Community.get_community_by_community_id(community_id) # get community by community_id
+        db.session.delete(community) # delete community from database
+        db.session.commit() # commit changes to database
