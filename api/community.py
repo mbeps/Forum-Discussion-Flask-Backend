@@ -23,3 +23,16 @@ def add_community() -> Response:
     cs: CommunitySubscribe = CommunitySubscribe(user_id=user_id, community_id=community.community_id) # community creator is automatically subscribed to community
     cs.save() # save community subscribe object to database
     return make_response(jsonify({'msg': 'Community has been added'}), 200) # return success message
+
+
+@app.route('/all_communities', methods=['GET'])
+def get_all_communities():
+    communities = Community.get_all_communities()
+    communities_list = []
+    for community in communities:
+        communities_list.append({
+            'community_id': community.community_id,
+            'community_name': community.community_name,
+            'description': community.description
+        })
+    return make_response(jsonify(communities_list), 200)
