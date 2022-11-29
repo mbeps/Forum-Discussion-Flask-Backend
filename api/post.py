@@ -35,7 +35,7 @@ def remove_post() -> Response:
     user_id: int = post_data.get('user_id')
     post = Post.query.filter_by(post_id=post_id).first() # get the post
     if post.user_id == user_id: # check if the user is the owner of the post
-        post.delete()
+        post.delete_post(post_id) # delete the post
         return make_response(jsonify({'msg': 'post has been removed'}), 200)
     return make_response(jsonify({'msg': 'you are not the owner of this post'}), 400)
 

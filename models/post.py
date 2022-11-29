@@ -14,9 +14,16 @@ class Post(db.Model, AppModel):
     create_dttm = db.Column(db.DateTime, default=datetime.datetime.now())
 
     @staticmethod
-    def get_posts_by_user_id(user_id):
+    def get_posts_by_user_id(user_id: int):
         return Post.query.filter_by(user_id=user_id).all()
 
     @staticmethod
-    def get_posts_by_community_id(community_id):
+    def get_posts_by_community_id(community_id: int):
         return Post.query.filter_by(community_id=community_id).all()
+
+    # delete a post
+    @staticmethod
+    def delete_post(post_id: int):
+        post = Post.query.filter_by(post_id=post_id).first()
+        db.session.delete(post)
+        db.session.commit()
