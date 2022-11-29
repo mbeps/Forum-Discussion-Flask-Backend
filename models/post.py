@@ -5,7 +5,7 @@ import datetime
 
 
 class Post(db.Model, AppModel):
-    __tablename__ = 'create_post'
+    __tablename__ = 'posts'
     post_id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer)
     community_id = db.Column(db.Integer)
