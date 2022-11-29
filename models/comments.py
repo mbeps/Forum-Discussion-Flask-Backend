@@ -104,4 +104,6 @@ class Comment(db.Model, AppModel):
         Returns:
             Comment: comment to be deleted
         """        
-        return Comment.query.filter_by(comment_id=comment_id).delete()
+        comment = Comment.query.filter_by(comment_id=comment_id).first()
+        db.session.delete(comment)
+        db.session.commit()

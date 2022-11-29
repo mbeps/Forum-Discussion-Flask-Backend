@@ -44,3 +44,22 @@ def get_all_comments() -> Response:
             'comment_time': comment[2]
         }) # append the comment to the list
     return make_response(jsonify(all_comments), 200) # return all the comments
+
+
+@app.route('/delete_comment', methods=['DELETE'])
+def delete_comment() -> Response:
+    """Deletes a comment for a post.
+
+    Returns:
+        Response: whether the comment was deleted or not
+    """    
+    comm = request.get_json() # get the comment from the request
+    comment_id: int = comm.get('comment_id') # get the comment id
+    user_id: int = comm.get('user_id') # get the user id
+    comment: Comment = Comment.query.filter_by(comment_id=comment_id).first() # get the comment
+    if comment: # if the comment exists
+        if comment.user_id == user_id: # check if the user is the owner of the comment
+            comment.delete_comment_by_id(comment_id) # delete the comment
+            return make_response(jsonify({'msg': 'Comment Deleted'}), 200) # return a response
+        return make_response(jsonify({'msg': 'You are not the owner of this comment'}), 400) # return a response
+    return make_response(jsonify({'msg': 'Comment does not exist'}), 400) # return a response
