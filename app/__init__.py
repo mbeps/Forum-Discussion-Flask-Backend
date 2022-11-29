@@ -56,5 +56,5 @@ mycursor = mydb.cursor()
 from api.signup import *
 from api.login import *
 from api.community import *
-from api.create_post import *
+from api.post import *
 from api.comments import *
