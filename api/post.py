@@ -97,3 +97,14 @@ def like_post() -> Response:
     cs.save() # save the LikePost instance to the database
     likes = LikePost.query.filter_by(post_id=post_id).count() # get the number of likes for the post
     return make_response(jsonify({'msg': 'You liked this post', 'total_likes': likes}), 200) # return a response to the user
+
+
+@app.route('/dislike', methods=['POST'])
+def dislike():
+    comm_subs = request.get_json() # get the post data
+    post_id: int = comm_subs.get('post_id') # get the post id
+    user_id: int = comm_subs.get('user_id') # get the user id
+    likes = LikePost.query.filter_by(post_id=post_id, user_id=user_id).delete() # delete the LikePost instance from the database
+    db.session.commit() # commit the changes to the database
+    likes = LikePost.query.filter_by(post_id=post_id).count() # get the number of likes for the post
+    return make_response(jsonify({'msg': 'You dislike this post', 'total_likes': likes}), 200) # return a response to the user
