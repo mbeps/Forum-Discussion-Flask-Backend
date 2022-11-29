@@ -25,7 +25,11 @@
 # November 2022
 **28**
 - Learning GitLab CI to implement CICD pipelines with Docker containers
-- Need to leard data mocking for testing APIs
+- Need to learn data mocking for testing APIs
+
+**29**
+- Finished experimenting with Meterial React library for front end
+- Looking into Flutter Web and Svelte
 
 # December 2022
 
