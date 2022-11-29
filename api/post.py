@@ -78,3 +78,22 @@ def get_all_posts() -> Response:
                 "posted_time": post[5]
             }) # append the post to the list of posts
     return make_response(jsonify(all_posts), 200) # return the list of posts to the user
+
+
+@app.route('/like_post', methods=['POST'])
+def like_post() -> Response:
+    """Likes a post. 
+    If the user has already liked the post, then the counter is not incremented.
+
+    Returns:
+        Response: whether the post was liked or not
+    """    
+    comm_subs = request.get_json() # get the post data
+    post_id: int = comm_subs.get('post_id') # get the post id
+    user_id: int = comm_subs.get('user_id') # get the user id
+    if (LikePost.query.filter_by(post_id=post_id, user_id=user_id).first()): # if the user has already liked the post
+        return make_response(jsonify({'msg': 'Post already liked'}), 400) # return a response to the user
+    cs = LikePost(post_id=post_id, user_id=user_id) # create a LikePost instance
+    cs.save() # save the LikePost instance to the database
+    likes = LikePost.query.filter_by(post_id=post_id).count() # get the number of likes for the post
+    return make_response(jsonify({'msg': 'You liked this post', 'total_likes': likes}), 200) # return a response to the user
