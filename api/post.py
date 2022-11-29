@@ -116,3 +116,20 @@ def dislike():
         likes = LikePost.query.filter_by(post_id=post_id).count() # get the number of likes for the post
         return make_response(jsonify({'msg': 'You disliked this post', 'total_likes': likes}), 200) # return a response to the user
     return make_response(jsonify({'msg': 'You have not liked this post'}), 400) # return a response to the user
+
+
+@app.route('/save_post', methods=['POST'])
+def save_post() -> Response:
+    """Saves a post for later viewing.
+
+    Returns:
+        Response: whether the post was saved or not
+    """    
+    save = request.get_json() # get the post data
+    post_id: int = save.get('post_id') # get the post id
+    user_id: int = save.get('user_id') # get the user id
+    if SavePost.query.filter_by(post_id=post_id, user_id=user_id).first(): # if the user has already saved the post
+        return make_response(jsonify({'msg': 'Post already in saved list'}), 400) # return a response to the user that the post is already saved
+    cs = SavePost(post_id=post_id, user_id=user_id) # create a SavePost instance
+    cs.save() # save the SavePost instance to the database
+    return make_response(jsonify({'msg': 'You saved this post'}), 200) # return a response to the user that the post was saved
