@@ -100,7 +100,7 @@ def like_post() -> Response:
 
 
 @app.route('/dislike', methods=['POST'])
-def dislike():
+def dislike() -> Response:
     """Dislikes a post. 
     If the user has not liked the post, then the counter is not decremented.
 
