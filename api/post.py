@@ -116,8 +116,8 @@ def like_post() -> Response:
     return make_response(jsonify({'msg': 'You liked this post', 'total_likes': likes}), 200) # return a response to the user
 
 
-@app.route('/dislike', methods=['POST'])
-def dislike() -> Response:
+@app.route('/dislike_post', methods=['POST'])
+def dislike_post() -> Response:
     """Dislikes a post. 
     If the user has not liked the post, then the counter is not decremented.
 
