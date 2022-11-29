@@ -133,3 +133,51 @@ def save_post() -> Response:
     cs = SavePost(post_id=post_id, user_id=user_id) # create a SavePost instance
     cs.save() # save the SavePost instance to the database
     return make_response(jsonify({'msg': 'You saved this post'}), 200) # return a response to the user that the post was saved
+
+
+def all_saved_posts(user_id: int) -> list:
+    """Get all posts saved by the user.
+
+    Args:
+        user_id (int): user for which to get all saved posts
+
+    Returns:
+        list: list of all saved posts
+    """    
+    mycursor.execute('''
+    select cp.post_id, cp.post_name, cp.description, u.username, c.community_name, cp.create_dttm from posts cp join user u
+    on u.user_id = cp.user_id
+    join community_subscribe cs
+    on cs.community_id = cp.community_id
+    join communities c on c.community_id = cp.community_id
+    join save_post sp on sp.post_id = cp.post_id
+    where sp.user_id = %s
+    ''', (user_id,)) # get all posts from all communities the user is subscribed to
+    data = mycursor.fetchall() # get all the data
+    mydb.commit() # commit the changes to the database
+    return data # return the data
+
+
+@app.route('/all_saved_posts', methods=['POST'])
+def get_all_saved_posts() -> Response:
+    """Gets all posts saved by the user.
+
+    Returns:
+        Response: list of all posts saved by the user
+    """    
+    user = request.get_json() # get the user data
+    user_id: int = user.get('user_id') # get the user id
+    posts: int = all_saved_posts(user_id) # get all posts saved by the user
+    all_posts: list[dict] = [] # create an empty list to store all posts
+    for post in posts: # loop through all posts
+        likes = LikePost.query.filter(LikePost.post_id == post[0]).count() # get the number of likes for the post
+        all_posts.append({ 
+            'post_id': post[0],
+            'post_name': post[1],
+            'description': post[2],
+            'username': post[3],
+            'community_name': post[4],
+            "total_likes": likes,
+            "posted_time": post[5]
+        }) # append the post to the list of posts
+    return make_response(jsonify(all_posts), 200) # return the list of posts to the user
