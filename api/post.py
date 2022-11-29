@@ -23,6 +23,23 @@ def create_post() -> Response:
     return make_response(jsonify({'msg': 'post has been created'}), 200) # return a response to the user
 
 
+@app.route('/remove_post', methods=['DELETE'])
+def remove_post() -> Response:
+    """Remove a post
+
+    Returns:
+        Response: whether the post was removed or not
+    """    
+    post_data = request.get_json()
+    post_id: int = post_data.get('post_id')
+    user_id: int = post_data.get('user_id')
+    post = Post.query.filter_by(post_id=post_id).first() # get the post
+    if post.user_id == user_id: # check if the user is the owner of the post
+        post.delete()
+        return make_response(jsonify({'msg': 'post has been removed'}), 200)
+    return make_response(jsonify({'msg': 'you are not the owner of this post'}), 400)
+
+
 def all_subscribed_community_posts(user_id: int) -> list[dict[str]]:
     """Find all posts in communities that a user is subscribed to.
 
