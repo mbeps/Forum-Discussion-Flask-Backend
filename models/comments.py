@@ -44,3 +44,64 @@ class Comment(db.Model, AppModel):
             Comment: comment to be returned
         """        
         return Comment.query.filter_by(comment_id=comment_id).first() 
+
+    @staticmethod
+    def get_comments_by_user_id(user_id: int):
+        """Gets a comment related to a user.
+
+        Args:
+            user_id (int): user from which to get comment from
+
+        Returns:
+            Comment: comment to be returned
+        """        
+        return Comment.query.filter_by(user_id=user_id).all()
+
+    @staticmethod
+    def delete_comment_by_id(comment_id: int):
+        """Deletes a comment by its ID.
+
+        Args:
+            comment_id (int): comment ID for which to delete comment from
+
+        Returns:
+            Comment: comment to be deleted
+        """        
+        return Comment.query.filter_by(comment_id=comment_id).delete()
+
+    @staticmethod
+    def delete_comment_by_post_id(post_id: int):
+        """Deletes all comments related to a post.
+
+        Args:
+            post_id (int): post from which to delete comments from
+
+        Returns:
+            Comment: _description_
+        """        
+        return Comment.query.filter_by(post_id=post_id).delete()
+
+    @staticmethod
+    def delete_comment_by_user_id(user_id: int):
+        """Deletes all comments related to a user.
+
+        Args:
+            user_id (int): user from which to delete comments from
+
+        Returns:
+            Comment: _description_
+        """        
+        return Comment.query.filter_by(user_id=user_id).delete()
+
+
+    @staticmethod
+    def delete_comment_by_id(comment_id: int):
+        """Deletes a comment by its ID.
+
+        Args:
+            comment_id (int): comment ID for which to delete comment from
+
+        Returns:
+            Comment: comment to be deleted
+        """        
+        return Comment.query.filter_by(comment_id=comment_id).delete()
