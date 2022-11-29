@@ -20,5 +20,27 @@ def new_comment() -> Response:
     return make_response(jsonify({'msg': 'Comment Added'}), 200) # return a response
 
 
+@app.route('/all_comments', methods=['POST'])
+def get_all_comments() -> Response:
+    """Gets all the comments for a post.
 
-
+    Returns:
+        Response: all the comments for a post
+    """    
+    post = request.get_json() # get the post from the request
+    post_id: int = post.get('post_id') # get the post id
+    mycursor.execute('''
+        select u.username, c.comment, c.create_dttm from comments c join user u
+        on u.user_id = c.user_id
+        where c.post_id = %s
+        ''', (post_id,)) # get all the comments for the post
+    comments = mycursor.fetchall() # fetch all the comments
+    mydb.commit() # commit the changes
+    all_comments: list[dict] = []
+    for comment in comments: # loop through the comments
+        all_comments.append({ 
+            'username': comment[0],
+            'comment': comment[1],
+            'comment_time': comment[2]
+        }) # append the comment to the list
+    return make_response(jsonify(all_comments), 200) # return all the comments
