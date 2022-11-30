@@ -25,7 +25,7 @@ def signup() -> Response:
     if User.query.filter_by(email=email).all(): # Check if the email already exists
         return make_response(jsonify({'error': 'User already exist'}), 400) # Return error if the email already exists
     # if user does not exist, create a new user
-    user: str = User(username=name, email=email, password=password) # Create a new user
+    user: User = User(username=name, email=email, password=password) # Create a new user
     user.save() # Save the user to the database
     email_authentication_code(email, user) # Send the email authentication code
     return make_response(jsonify({'msg': 'signed up success'}), 200) # Return success message
@@ -43,7 +43,7 @@ def signup_full() -> Response:
     verify_mail = request.get_json() # Get the user data from the request
     code: str = verify_mail.get('code') # Get the code
     email: str = verify_mail.get('email') # Get the email
-    user: str = User.query.filter_by(email=email).first() # Get the user from the database
+    user: User = User.query.filter_by(email=email).first() # Get the user from the database
     if user: # Check if the user exists
         if code == user.code: # Check if the code is correct
             user.is_authenticated: bool = True # Set the user to authenticated

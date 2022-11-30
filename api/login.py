@@ -11,7 +11,7 @@ def login() -> Response:
     email: str = login_cred.get('email') # Get the email
     password: str = login_cred.get('password') # Get the password 
 
-    user: str = User.query.filter_by(email=email).first() # Get the user from the database
+    user: User = User.query.filter_by(email=email).first() # Get the user from the database
     if user: # Check if the user exists
         if pbkdf2_sha256.verify(password, user.password): # Check if the password is correct
             return make_response(jsonify( # Return success message with the user data
