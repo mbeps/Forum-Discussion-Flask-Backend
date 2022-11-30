@@ -7,11 +7,21 @@ from models import User
 
 @app.route('/login', methods=['POST'])
 def login() -> Response:
-    login_cred: Request = request.get_json() # Get the user data from the request
+    """Allows user to login to their account. 
+    Requires username and password to be correct and user to be verified.
+
+    Fields:
+        username (str)
+        password (str)
+
+    Returns:
+        Response: whether the user was logged in or not
+    """    
+    login_cred: dict = request.get_json() # Get the user data from the request
     email: str = login_cred.get('email') # Get the email
     password: str = login_cred.get('password') # Get the password 
 
-    user: str = User.query.filter_by(email=email).first() # Get the user from the database
+    user: User = User.query.filter_by(email=email).first() # Get the user from the database
     if user: # Check if the user exists
         if pbkdf2_sha256.verify(password, user.password): # Check if the password is correct
             return make_response(jsonify( # Return success message with the user data

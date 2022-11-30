@@ -8,14 +8,20 @@ from models import Comment
 def new_comment() -> Response:
     """Creates a new comment for a post by a user.
 
+    Fields:
+        post_id (int)
+        user_id (int)
+        comment (str)
+
     Returns:
         Response: whether the comment was created or not
     """    
-    comm = request.get_json() # get the comment from the request
+    comm: dict = request.get_json() # get the comment from the request
     post_id: int = comm.get('post_id') # get the post id
     user_id: int = comm.get('user_id') # get the user id
     comment: str = comm.get('comment') # get the comment
-    cs = Comment(post_id=post_id, user_id=user_id, comment=comment) # create a comment object
+    
+    cs: Comment = Comment(post_id=post_id, user_id=user_id, comment=comment) # create a comment object
     cs.save() # save the comment to the database
     return make_response(jsonify({'msg': 'Comment Added'}), 200) # return a response
 
@@ -24,11 +30,15 @@ def new_comment() -> Response:
 def get_all_comments() -> Response:
     """Gets all the comments for a post.
 
+    Fields:
+        post_id (int)
+        
     Returns:
         Response: all the comments for a post
     """    
-    post = request.get_json() # get the post from the request
+    post: dict = request.get_json() # get the post from the request
     post_id: int = post.get('post_id') # get the post id
+    
     mycursor.execute('''
         select u.username, c.comment, c.create_dttm from comments c join user u
         on u.user_id = c.user_id
@@ -50,12 +60,17 @@ def get_all_comments() -> Response:
 def delete_comment() -> Response:
     """Deletes a comment for a post.
 
+    Fields:
+        comment_id (int)
+        user_id (int)
+
     Returns:
         Response: whether the comment was deleted or not
     """    
-    comm = request.get_json() # get the comment from the request
+    comm: dict = request.get_json() # get the comment from the request
     comment_id: int = comm.get('comment_id') # get the comment id
     user_id: int = comm.get('user_id') # get the user id
+    
     comment: Comment = Comment.query.filter_by(comment_id=comment_id).first() # get the comment
     if comment: # if the comment exists
         if comment.user_id == user_id: # check if the user is the owner of the comment

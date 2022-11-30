@@ -7,6 +7,7 @@ from models.community import Community
 
 class Comment(db.Model, AppModel):
     """`Comment`'s model/table. 
+    
     Fields:
         `comment_id` (int): primary key
         `post_id` (int): foreign key to `Post`'s table
@@ -14,12 +15,12 @@ class Comment(db.Model, AppModel):
         `comment` (str): comment
         `created_at` (datetime): date and time of creation
     """    
-    __tablename__ = 'comments'
+    __tablename__: str = 'comments'
     comment_id: int = db.Column(db.Integer, primary_key=True)
     post_id: int = db.Column(db.Integer)
     user_id: int = db.Column(db.Integer)
     comment: str = db.Column(db.String(255))
-    create_dttm = db.Column(db.Date, default=datetime.date.today())
+    create_dttm: datetime.date = db.Column(db.Date, default=datetime.date.today())
 
     @staticmethod
     def get_comments_by_post_id(post_id: int):
@@ -29,7 +30,7 @@ class Comment(db.Model, AppModel):
             post_id (int): post from which to get comment from
 
         Returns:
-            Comment: comment to be returned
+            list[Comment]: comment to be returned
         """        
         return Comment.query.filter_by(post_id=post_id).all()
 
