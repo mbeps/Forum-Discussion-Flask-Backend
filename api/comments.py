@@ -11,7 +11,7 @@ def new_comment() -> Response:
     Returns:
         Response: whether the comment was created or not
     """    
-    comm = request.get_json() # get the comment from the request
+    comm: dict = request.get_json() # get the comment from the request
     post_id: int = comm.get('post_id') # get the post id
     user_id: int = comm.get('user_id') # get the user id
     comment: str = comm.get('comment') # get the comment
@@ -27,7 +27,7 @@ def get_all_comments() -> Response:
     Returns:
         Response: all the comments for a post
     """    
-    post = request.get_json() # get the post from the request
+    post: dict = request.get_json() # get the post from the request
     post_id: int = post.get('post_id') # get the post id
     mycursor.execute('''
         select u.username, c.comment, c.create_dttm from comments c join user u
@@ -53,7 +53,7 @@ def delete_comment() -> Response:
     Returns:
         Response: whether the comment was deleted or not
     """    
-    comm = request.get_json() # get the comment from the request
+    comm: dict = request.get_json() # get the comment from the request
     comment_id: int = comm.get('comment_id') # get the comment id
     user_id: int = comm.get('user_id') # get the user id
     comment: Comment = Comment.query.filter_by(comment_id=comment_id).first() # get the comment

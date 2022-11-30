@@ -16,7 +16,7 @@ def signup() -> Response:
     Returns:
         Response: status of signup (success or error)
     """
-    signup_user: dict[str, str] = request.get_json() # Get the user data from the request
+    signup_user: dict = request.get_json() # Get the user data from the request
     name: str = signup_user.get('username') # Get the username
     email: str = signup_user.get('email') # Get the email
     password: str = signup_user.get('password') # Get the password
@@ -40,7 +40,7 @@ def signup_full() -> Response:
     Returns:
         Response: whether the signup was successful or not
     """    
-    verify_mail = request.get_json() # Get the user data from the request
+    verify_mail: dict = request.get_json() # Get the user data from the request
     code: str = verify_mail.get('code') # Get the code
     email: str = verify_mail.get('email') # Get the email
     user: User = User.query.filter_by(email=email).first() # Get the user from the database

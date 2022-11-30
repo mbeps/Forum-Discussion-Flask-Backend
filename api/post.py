@@ -12,7 +12,7 @@ def create_post() -> Response:
     Returns:
         Response: whether the post was created or not
     """    
-    post_data = request.get_json() # get the post data
+    post_data: dict = request.get_json() # get the post data
     user_id: int = post_data.get('user_id') # get the user id
     community_id: int = post_data.get('community_id') # get the community id
     post_name: str = post_data.get('post_name') # get the post name
@@ -30,7 +30,7 @@ def remove_post() -> Response:
     Returns:
         Response: whether the post was removed or not
     """    
-    post_data = request.get_json()
+    post_data: dict = request.get_json()
     post_id: int = post_data.get('post_id')
     user_id: int = post_data.get('user_id')
     post: Post = Post.query.filter_by(post_id=post_id).first() # get the post
@@ -77,7 +77,7 @@ def get_all_posts() -> Response:
     Returns:
         Response: all posts from all communities the user is subscribed to
     """    
-    user = request.get_json() # get the user data
+    user: dict = request.get_json() # get the user data
     user_id: int = user.get('user_id') # get the user id
     posts: list = all_subscribed_community_posts(user_id) # get all posts from all communities the user is subscribed to
     all_posts: list[dict] = [] # create an empty list to store all posts
@@ -105,7 +105,7 @@ def like_post() -> Response:
     Returns:
         Response: whether the post was liked or not
     """    
-    comm_subs = request.get_json() # get the post data
+    comm_subs: dict = request.get_json() # get the post data
     post_id: int = comm_subs.get('post_id') # get the post id
     user_id: int = comm_subs.get('user_id') # get the user id
     if (LikePost.query.filter_by(post_id=post_id, user_id=user_id).first()): # if the user has already liked the post
@@ -124,7 +124,7 @@ def dislike_post() -> Response:
     Returns:
         Response: whether the post was disliked or not
     """    
-    comm_subs = request.get_json() # get the post data
+    comm_subs: dict = request.get_json() # get the post data
     post_id: int = comm_subs.get('post_id') # get the post id
     user_id: int = comm_subs.get('user_id') # get the user id
     if (LikePost.query.filter_by(post_id=post_id, user_id=user_id).first()): # if the user has liked the post
@@ -142,7 +142,7 @@ def save_post() -> Response:
     Returns:
         Response: whether the post was saved or not
     """    
-    save = request.get_json() # get the post data
+    save: dict = request.get_json() # get the post data
     post_id: int = save.get('post_id') # get the post id
     user_id: int = save.get('user_id') # get the user id
     if SavePost.query.filter_by(post_id=post_id, user_id=user_id).first(): # if the user has already saved the post
@@ -182,7 +182,7 @@ def get_all_saved_posts() -> Response:
     Returns:
         Response: list of all posts saved by the user
     """    
-    user = request.get_json() # get the user data
+    user: dict = request.get_json() # get the user data
     user_id: int = user.get('user_id') # get the user id
     posts: int = all_saved_posts(user_id) # get all posts saved by the user
     all_posts: list[dict] = [] # create an empty list to store all posts

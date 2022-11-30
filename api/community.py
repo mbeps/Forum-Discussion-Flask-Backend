@@ -13,7 +13,7 @@ def add_community() -> Response:
     Returns:
         Response: whether the community was created or not
     """    
-    community = request.get_json() # get json data from request
+    community: dict = request.get_json() # get json data from request
     user_id: str = community.get('user_id') # get user_id from json data
     community_name: str = community.get('community_name') # get community_name from json data
     description: str = community.get('description') # get description from json data
@@ -32,8 +32,8 @@ def get_all_communities() -> Response:
     Returns:
         Response: list of all communities
     """    
-    communities = Community.get_all_communities() # get all communities from database
-    communities_list: list[dict[str]] = [] # create empty list to store communities
+    communities: dict = Community.get_all_communities() # get all communities from database
+    communities_list: list[dict] = [] # create empty list to store communities
     for community in communities:
         communities_list.append({ # append community to list
             'community_id': community.community_id,
@@ -88,7 +88,7 @@ def all_subscribed_communities() -> Response:
     Returns:
         Response: list of communities that user is subscribed to
     """    
-    user = request.get_json() # get json data from request
+    user: dict = request.get_json() # get json data from request
     user_id: int = user.get('user_id') # get user_id from json data
     communities: Community = CommunitySubscribe.get_all_subscribed_communities(user_id) # get all communities user is subscribed to
     all_communities: list[dict] = [] # create empty list to store communities
@@ -104,7 +104,7 @@ def all_subscribed_communities() -> Response:
 def remove_community() -> Response:
     """Deletes a community from the database.
     """
-    community = request.get_json() # get json data from request
+    community: dict = request.get_json() # get json data from request
     community_id: int = community.get('community_id') # get community_id from json data
     if (Community.query.filter_by(community_id=community_id).first()):
         Community.delete_community(community_id) # delete community from database
@@ -120,7 +120,7 @@ def unsubscribe_community() -> Response:
     Returns:
         Response: whether the user was unsubscribed from the community or not
     """    
-    comm_subs = request.get_json() # get json data from request
+    comm_subs: dict = request.get_json() # get json data from request
     community_id: int = comm_subs.get('community_id') # get community_id from json data
     user_id: int = comm_subs.get('user_id') # get user_id from json data
     if (CommunitySubscribe.query.filter_by(community_id=community_id, user_id=user_id).first()): # check if user is subscribed to community
