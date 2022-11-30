@@ -7,7 +7,13 @@ from models import Post, LikePost, SavePost, CommunitySubscribe
 
 @app.route('/create_post', methods=['POST'])
 def create_post() -> Response:
-    """Creates a post in a community
+    """Creates a post in a community.
+
+    Fields:
+        user_id (int)
+        community_id (int)
+        post_name (str)
+        description (str)
 
     Returns:
         Response: whether the post was created or not
@@ -17,6 +23,7 @@ def create_post() -> Response:
     community_id: int = post_data.get('community_id') # get the community id
     post_name: str = post_data.get('post_name') # get the post name
     description: str = post_data.get('description') # get the description
+    
     post: Post = Post(user_id=user_id, community_id=community_id, post_name=post_name, description=description) # create a post instance using the above data
     post.save() # save the post to the database
 
@@ -25,7 +32,7 @@ def create_post() -> Response:
 
 @app.route('/remove_post', methods=['DELETE'])
 def remove_post() -> Response:
-    """Remove a post
+    """Remove a post.
 
     Returns:
         Response: whether the post was removed or not
@@ -65,20 +72,16 @@ def all_subscribed_community_posts(user_id: int) -> list[dict[str]]:
 @app.route('/all_posts', methods=['POST'])
 def get_all_posts() -> Response:
     """Gets all posts from all communities the user is subscribed to along with other data. 
-    Each post will have:
-    - post_id
-    - post_name
-    - description
-    - username
-    - community_name
-    - total_likes
-    - posted_time
+    
+    Fields:
+        user_id (int)
 
     Returns:
         Response: all posts from all communities the user is subscribed to
     """    
     user: dict = request.get_json() # get the user data
     user_id: int = user.get('user_id') # get the user id
+    
     posts: list = all_subscribed_community_posts(user_id) # get all posts from all communities the user is subscribed to
     all_posts: list[dict] = [] # create an empty list to store all posts
     for post in posts: # loop through all posts
@@ -102,12 +105,17 @@ def like_post() -> Response:
     """Likes a post. 
     If the user has already liked the post, then the counter is not incremented.
 
+    Fields:
+        user_id (int)
+        post_id (int)
+
     Returns:
         Response: whether the post was liked or not
     """    
     comm_subs: dict = request.get_json() # get the post data
     post_id: int = comm_subs.get('post_id') # get the post id
     user_id: int = comm_subs.get('user_id') # get the user id
+    
     if (LikePost.query.filter_by(post_id=post_id, user_id=user_id).first()): # if the user has already liked the post
         return make_response(jsonify({'msg': 'Post already liked'}), 400) # return a response to the user
     cs: LikePost = LikePost(post_id=post_id, user_id=user_id) # create a LikePost instance
@@ -121,12 +129,17 @@ def dislike_post() -> Response:
     """Dislikes a post. 
     If the user has not liked the post, then the counter is not decremented.
 
+    Fields:
+        user_id (int)
+        post_id (int)
+
     Returns:
         Response: whether the post was disliked or not
     """    
     comm_subs: dict = request.get_json() # get the post data
     post_id: int = comm_subs.get('post_id') # get the post id
     user_id: int = comm_subs.get('user_id') # get the user id
+    
     if (LikePost.query.filter_by(post_id=post_id, user_id=user_id).first()): # if the user has liked the post
         LikePost.query.filter_by(post_id=post_id, user_id=user_id).delete() # delete the LikePost instance from the database
         db.session.commit() # commit the changes to the database
@@ -139,12 +152,17 @@ def dislike_post() -> Response:
 def save_post() -> Response:
     """Saves a post for later viewing.
 
+    Fields:
+        user_id (int) 
+        post_id (int)
+
     Returns:
         Response: whether the post was saved or not
     """    
     save: dict = request.get_json() # get the post data
     post_id: int = save.get('post_id') # get the post id
     user_id: int = save.get('user_id') # get the user id
+    
     if SavePost.query.filter_by(post_id=post_id, user_id=user_id).first(): # if the user has already saved the post
         return make_response(jsonify({'msg': 'Post already in saved list'}), 400) # return a response to the user that the post is already saved
     cs: SavePost = SavePost(post_id=post_id, user_id=user_id) # create a SavePost instance
@@ -179,11 +197,15 @@ def all_saved_posts(user_id: int) -> list:
 def get_all_saved_posts() -> Response:
     """Gets all posts saved by the user.
 
+    Fields:
+        user_id (int)
+        
     Returns:
         Response: list of all posts saved by the user
-    """    
+    """
     user: dict = request.get_json() # get the user data
     user_id: int = user.get('user_id') # get the user id
+    
     posts: int = all_saved_posts(user_id) # get all posts saved by the user
     all_posts: list[dict] = [] # create an empty list to store all posts
     for post in posts: # loop through all posts

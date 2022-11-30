@@ -13,6 +13,11 @@ def signup() -> Response:
     If the already exists, it will return an error informing the user that the email is already in use.
     If the email does not exist, it will create a new user and send an email with a code to authenticate the email.
 
+    Fields:
+        username (str)
+        email (str)
+        password (str)
+
     Returns:
         Response: status of signup (success or error)
     """
@@ -37,11 +42,15 @@ def signup_full() -> Response:
     Authenticates user who has tried to sign up.
     If the code is correct, it will return a success message and the user will be able to log in.
 
+    Fields:
+        email (str)
+        code (int)
+
     Returns:
         Response: whether the signup was successful or not
     """    
     verify_mail: dict = request.get_json() # Get the user data from the request
-    code: str = verify_mail.get('code') # Get the code
+    code: int = verify_mail.get('code') # Get the code
     email: str = verify_mail.get('email') # Get the email
     user: User = User.query.filter_by(email=email).first() # Get the user from the database
     if user: # Check if the user exists
