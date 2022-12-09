@@ -4,23 +4,37 @@
 - Each community has its own interests where specific types of discussions take place
 
 ## Features
-- Users can authenticate 
-- Users can create communities
-- Users can delete communities
-- Users can subscribe to existing communities
-- Users can unsubscribe from communities
-- Users can create posts
-- Users can modify posts
-- Users can delete posts
-- Users can comment on posts
-- Users can modify comments
-- Users can delete comments
+### Authentication
+- Sign up
+- Log in
+
+### Community
+- Create communities
+- Delete communities
+- Subscribe to existing communities
+- Unsubscribe from communities
+- View all communities 
+- View all subscribed communities
+
+### Post
+- Create posts
+- Modify posts*
+- Delete posts
+- Comment on posts
+
+### Comment
+- Modify comments*
+- Delete comments
 
 ## Requirements
 - Poetry 1.2+
 - Python 3.11+
+- MySQL 8
 
 # Instructions
+**Set Up `.env` File**
+- `.env.example` is provided 
+
 **Installing Required Packages for Project**
 ```
 poetry install
